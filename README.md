@@ -1,16 +1,13 @@
-## Hi there 👋
+I play Geometry Dash a lot more than I should 🟪
 
-<!--
-**Fryy55/Fryy55** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Pfp art by BlueShaders (Reddit) ✨
 
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Here's the default template idk:
+- 🔭 I’m currently working on `GD mods`
+- 🌱 I’m currently learning `a few C++ frameworks and want to start web dev`
+- 👯 I’m looking to collaborate on `GD mods with frig/exp 🙏`
+- 🤔 I’m looking for help with `Geode sometimes`
+- 💬 Ask me about `anything!`
+- 📫 How to reach me: `3pm.fryy@gmail.com`
+- 😄 Pronouns: she/her
+- ⚡ Fun fact: `and i said "oooh, the hooker was naked"`
