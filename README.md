@@ -11,3 +11,5 @@ Here's the default template idk:
 - 📫 How to reach me: `3pm.fryy@gmail.com`
 - 😄 Pronouns: `she/her`
 - ⚡ Fun fact: `and i said "oooh, the hooker was naked"`
+
+Oh, and the last thing - my Discord server: https://discord.com/invite/4vqtjfdhTk <3
