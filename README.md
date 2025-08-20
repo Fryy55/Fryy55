@@ -14,5 +14,5 @@ Here's the default template idk:
 
 Oh, and the last thing - my Discord server: https://discord.com/invite/4vqtjfdhTk <3
 
-[![yeee](https://github-readme-stats-rose-eta-86.vercel.app/api/top-langs/?username=Fryy55&theme=midnight-purple&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
+[![yeee](https://github-readme-stats-rose-eta-86.vercel.app/api/top-langs/?username=Fryy55&theme=midnight-purple&layout=compact)](https://github.com/anuraghazra/github-readme-stats)\
 [![yeee](https://github-readme-stats.vercel.app/api?username=Fryy55&count_private=true&theme=midnight-purple&hide=contribs&line_height=15)](https://github.com/anuraghazra/github-readme-stats)
