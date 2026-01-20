@@ -9,7 +9,7 @@ Here's the default template idk:
 - 🤔 I’m looking for help with `Geode sometimes`
 - 💬 Ask me about `anything!`
 - 📫 How to reach me: `3pm.fryy@gmail.com`
-<!--- 😄 Pronouns: `she/her`-->
+- 😄 Pronouns: `she/her`
 - ⚡ Fun fact: `and i said "oooh, the hooker was naked"`
 
 Oh, and the last thing - my Discord server: https://discord.com/invite/4vqtjfdhTk <3
