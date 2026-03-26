@@ -276,9 +276,9 @@ More detailed whitespace and indentation rules regarding specifically functions,
 
 # 4. Structs/Classes/Unions
 ## 4.1 General Information
-Structs should be used for simple general purpose aggregates (even if the structure in question isn't an aggregate by definition). May have custom constructors but _no custom/RAII destructor_. Members follow `camelCase`
+Structs should be used for simple general purpose aggregates (even if the structure in question isn't an aggregate by definition) and data-first types. May have custom constructors and a custom/RAII destructor. Members follow `camelCase`
 
-Classes should be used for Object-Oriented Programming. This means classes can have member functions, non-`public` members, nested classes, etc. Members follow dedicated conventions, described in [2.3 Class Members](#23-class-members)
+Classes should be used for Object-Oriented Programming. This means classes can have robust member functions, non-`public` members, nested classes, etc. Members follow dedicated conventions, described in [2.3 Class Members](#23-class-members)
 
 Unions should rarely be used due to type-safe `std::variant` existing. Otherwise follow rules similar to structs. **Union-based type punning is heavily discouraged due to being UB with better alternatives!**
 
@@ -286,13 +286,17 @@ _All_ of these types must be marked `final` if applicable
 
 ## 4.2 Structure
 ### 4.2.1 Structs
-Should have raw members, optionally with a custom constructor(s). Constructor(s) should be put on top of members with one line of separation and use member initializer lists. Inline initializers are allowed
+Should have raw members, optionally with a custom constructor(s) and/or destructor. Constructor(s)/destructor should be put on top of members with one line of separation and use member initializer lists. Inline initializers are allowed
 
 Example:
 ```c++
 struct Example1 final {
     Example1(std::uint64_t* pointer, std::int16_t number) : pointer(pointer), number(number) {
         std::println("Constructed with {} and {}", pointer, number);
+    }
+
+    ~Example() {
+        std::println("Destructed");
     }
 
     std::string string{};
