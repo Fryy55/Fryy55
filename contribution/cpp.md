@@ -756,6 +756,12 @@ _All_ functions should be qualified as `noexcept` whenever possible. Exception f
 
 A free function should either be _wrapped in a namespace_ (if external linkage is required) or _be `static`_
 
+All functions **except constructors, destructors and `void`-returning lambdas** _must_ have a `return` statement at the end of control flow paths. _This includes non-lambda `void`-returning functions_
+
+Functions that take no parameters should _never_ have `(void)` as the parameter list. Empty parenthesis are used instead
+
+If `main` function's parameters aren't used they should _not_ be explicitly listed
+
 ## 5.8 Templates
 The `template` keyword and the specifying statement should have a space
 
@@ -779,6 +785,16 @@ requires (T a) {
 ```
 
 ## 5.9 Lambdas
+Lambdas should have a space between the parameter list and the body
 
+Lambdas should _not_ have `[=]` or `[&]` as capture clauses. _All variables should be captured by value/reference or moved into capture variables **individually**_
+
+```c++
+static constexpr lambda = [this, var]<typename T>(Type param) mutable noexcept -> RetType {
+    body;
+};
+```
+
+Lambdas should _not_ have a trailing return type specified unless necessary for the return type inference
 
 # 6. Wrapping
