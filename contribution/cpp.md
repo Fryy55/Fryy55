@@ -59,6 +59,7 @@ This document explains standards that the C++ code you contribute must adhere to
     - [6.2.2 Constructors](#622-constructors)
   - [6.3 Control Flow Elements](#63-control-flow-elements)
   - [6.4 Operators](#64-operators)
+- [7. Final Notes](#7-final-notes)
 
 
 # 1. Environment Configuration
@@ -984,7 +985,13 @@ foo(
     ((var1 + var2) // Could also be wrapped similarly to `&&` in the example
     *
     var3)
-    +
+    -
     var4
 );
 ```
+
+
+# 7. Final Notes
+All codestyle here is meant to serve as an _exhaustive reference_ to projects' codestyle where it applies. Anything not covered here can _still be a valid changes request/rejection reason if it's easy to infer the rules for it from surrounding code_
+
+If you notice any inconsistencies between this document and existing (likely old) code, feel free to PR changes to the problematic project(s)
