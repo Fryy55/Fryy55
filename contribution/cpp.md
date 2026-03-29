@@ -32,7 +32,7 @@ This document explains standards that the C++ code you contribute must adhere to
     - [4.2.1 Structs](#421-structs)
     - [4.2.2 Classes](#422-classes)
     - [4.2.3 Unions](#423-unions)
-  - [4.3 Notes](#43-notes)
+  - [4.3 Alignment](#43-alignment)
 - [5. General Codestyle](#5-general-codestyle)
   - [5.1 Types](#51-types)
     - [5.1.1 Integers](#511-integers)
@@ -482,7 +482,7 @@ private:
 ### 4.2.3 Unions
 Rules for unions are similar to structs, see [4.2.1 Structs](#421-structs)
 
-## 4.3 Notes
+## 4.3 Alignment
 **Both structs and classes MUST have their layout optimized for type alignment!** As a first step try reordering members in the descending order of their sizes, then account for potential stricter alignment specified with `alignas`. If unsure check the object layout for holes with tools like `pahole`
 
 Consider using `alignas` to optimize cache locality if the type is close enough to applicable sizes and is vastly used in arrays
