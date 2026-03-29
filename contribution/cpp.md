@@ -1,5 +1,8 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
+###### Revision from 2026-03-29
+---
+
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
 
 <!-- omit from toc -->
@@ -10,20 +13,21 @@ This document explains standards that the C++ code you contribute must adhere to
   - [1.3 Project Structure](#13-project-structure)
     - [Geode Mods](#geode-mods)
 - [2. Naming Conventions](#2-naming-conventions)
-  - [2,1 General Notes](#21-general-notes)
+  - [2.1 General Notes](#21-general-notes)
   - [2.2 Variables](#22-variables)
   - [2.3 Misc Entities](#23-misc-entities)
   - [2.4 Class Members](#24-class-members)
   - [2.5 Files](#25-files)
   - [2.6 CMake](#26-cmake)
   - [2.7 Comments](#27-comments)
+  - [2.8 Git Commits](#28-git-commits)
   - [Geode Mods](#geode-mods-1)
 - [3. File Structure and Whitespace](#3-file-structure-and-whitespace)
-  - [3.1 Header File Structure](#31-header-file-structure)
-  - [3.2 Source File Structure](#32-source-file-structure)
-  - [Notes](#notes)
+  - [3.1 General Notes](#31-general-notes)
+  - [3.2 Header File Structure](#32-header-file-structure)
+  - [3.3 Source File Structure](#33-source-file-structure)
 - [4. Structs/Classes/Unions](#4-structsclassesunions)
-  - [4.1 General Information](#41-general-information)
+  - [4.1 General Notes](#41-general-notes)
   - [4.2 Structure](#42-structure)
     - [4.2.1 Structs](#421-structs)
     - [4.2.2 Classes](#422-classes)
@@ -49,9 +53,13 @@ This document explains standards that the C++ code you contribute must adhere to
     - [5.6.6 `goto`](#566-goto)
     - [5.6.7 `try...catch`](#567-trycatch)
   - [5.7 Functions](#57-functions)
+    - [Geode Mods](#geode-mods-2)
   - [5.8 Templates](#58-templates)
-  - [5.9 Lambdas](#59-lambdas)
-- [5.10 Macros](#510-macros)
+  - [5.9 Parameter Packs](#59-parameter-packs)
+  - [5.10 Lambdas](#510-lambdas)
+  - [5.11 Macros](#511-macros)
+  - [5.12 Casts](#512-casts)
+  - [5.13 Namespaces](#513-namespaces)
 - [6. Wrapping](#6-wrapping)
   - [6.1 General Notes](#61-general-notes)
   - [6.2 Functions](#62-functions)
@@ -59,14 +67,17 @@ This document explains standards that the C++ code you contribute must adhere to
     - [6.2.2 Constructors](#622-constructors)
   - [6.3 Control Flow Elements](#63-control-flow-elements)
   - [6.4 Operators](#64-operators)
+  - [6.5 Templates](#65-templates)
 - [7. Final Notes](#7-final-notes)
 
 
 # 1. Environment Configuration
 ## 1.1 Files
-All indentation should be in _tabs_ (`\t`, ASCII `0x9`). This can be semi-automatically handled by most text editors/IDEs
+All indentation should be in _tabs_ (`\t`, ASCII `0x9`). This can be semi-automatically handled by most IDEs/text editors
 
 A single tab should be visually equal to 4 spaces
+
+Ligatures aren't banned, but it's recommended to keep them disabled to maintain monospace alignment
 
 C++ files should have _no newline_ at the end
 
@@ -154,12 +165,12 @@ _These are purely examples, actual directories can vary between projects and are
 
 
 # 2. Naming Conventions
-## 2,1 General Notes
+## 2.1 General Notes
 `const(expr)`-ness does _not_ affect naming
 
 Short forms like `str` for string, `spr` for sprite, `btn` for button are permitted in local variable names but _not in function names_
 
-Swear words in variable names/comments/etc. are allowed, but please focus on naming code entities logically and instead share your opinion in commit names/comments
+Swear words in variable names/comments/etc. are allowed, but please focus on naming code entities logically and instead share your opinion in commit messages/comments
 
 ## 2.2 Variables
 Local variables - `camelCase`
@@ -172,7 +183,7 @@ Global variables are **discouraged entirely**
 
 Template variables - `camelCase_v`
 
-Variable names generally should be _descriptive_. In simple logic cases one/two letter variables names are permitted. (e.g. `i` and `j` could be used as generic iteration variables; `c` could be used as a `char` variable for string iteration; `e` could be used as an exception name in a `try...catch` block)
+Variable names generally should be _descriptive_. In simple logic cases, one/two letter variables names are permitted (e.g. `i` and `j` could be used as generic iteration variables; `c` could be used as a `char` variable for string iteration; `e` could be used as an exception name in a `try...catch` block)
 
 ## 2.3 Misc Entities
 Macros - `PROJECT_NAME_UPPER_SNAKE_CASE`
@@ -183,11 +194,11 @@ Structs/Classes/Unions - `PascalCase`
 
 Enums/Class enums - `PascalCase`
 
-Enum members - `PascalCase` **(discouraged unless scoped externally)**
+Enum members - `PascalCase` **(unscoped enums are discouraged unless scoped externally)**
 
 Class enum members - `PascalCase`, `UPPER_SNAKE_CASE` if "internal" (e.g. a `COUNT` member)
 
-Namespaces - `snake_case`, but generally names should be kept **relatively short** and at **one word**
+Namespaces - `snake_case`, but generally names should be kept _relatively short_ and at _one word_
 
 Concepts - `PascalCase`
 
@@ -211,7 +222,7 @@ Static variables - `s_camelCase`
 Destructors - `~ClassName`
 
 ## 2.5 Files
-Class files - according to a class name (e.g. a file containing the definition of class `HelperClass` should be named `HelperClass.cpp`)
+Class files - according to the class name (e.g. a file containing the definition of a `HelperClass` class should be named `HelperClass.cpp`)
 
 General files - `kebab-case.ext`
 
@@ -223,12 +234,22 @@ Modules and extra files - `kebab-case.cmake` in `cmake/`
 ## 2.7 Comments
 Comments should be in American English, fully _lowercase_, potentially informal and have no full punctuation. The primary purpose of this is to keep the general "felling" of the codebase approachable and avoid potential AI accusations in projects where it's undesired
 
+## 2.8 Git Commits
+Commit messages should have proper capitalization (but no ending `.`), be formal, descriptive and wrap file names and code entities with grave accent characters (`` ` ``)
+
+If you're really tired they can follow comments' style
+
 ## Geode Mods
 Hooked classes - `HClassName` (e.g. `HMenuLayer` as a hooked `MenuLayer`)
 
 
 # 3. File Structure and Whitespace
-## 3.1 Header File Structure
+## 3.1 General Notes
+Within their categories, headers should preferably be ordered _by their usage in the code_ (e.g. if you're using `<string_view>` a few lines before you use `<span>`, `#include <string_view>` should come first)
+
+More detailed whitespace and indentation rules regarding specifically functions, namespaces, classes etc. are described further in their respective sections
+
+## 3.2 Header File Structure
 - `#pragma once`
 - _Empty line_
 - Project headers (included with `""`, added globally via `target_include_directories` in CMakeLists.txt)
@@ -266,8 +287,8 @@ class Helper2 final {
 }
 ```
 
-## 3.2 Source File Structure
-- Header for implementation _[optional if the source file implements the header]_
+## 3.3 Source File Structure
+- Header for implementation _[optional, only needed if the source file implements a header]_
 - _Empty line [optional]_
 - Project headers (included with `""`, added globally via `target_include_directories` in CMakeLists.txt)
 - _Empty line_
@@ -295,35 +316,32 @@ Example (`helpers.cpp`):
 using namespace example;
 
 
-void Helper1::foo() {
+void Helper1::foo() noexcept {
     // ...
 }
 
-void Helper1::bar() {
+void Helper1::bar() noexcept {
     // ...
 }
 
 
-void Helper2::baz() {
+void Helper2::baz() noexcept {
     // ...
 }
 ```
 
-## Notes
-Within their categories headers should preferably be ordered _by their usage in the code_ (e.g. if you're using `<string_view>` a few lines before you use `<span>`, `#include <string>` should come first)
-
-More detailed whitespace and indentation rules regarding specifically functions, namespaces, classes etc. are described further in their respective sections
-
 
 # 4. Structs/Classes/Unions
-## 4.1 General Information
-Structs should be used for simple general purpose aggregates (even if the structure in question isn't an aggregate by definition) and data-first types. May have custom constructors and a custom/RAII destructor. Members follow `camelCase`
+## 4.1 General Notes
+Structs should be used for simple general purpose aggregates (even if the structure in question isn't an aggregate by definition) and data-focused types. May have custom constructors, a custom/RAII destructor and, potentially, small helper getters/utility functions. Members follow `camelCase`
 
-Classes should be used for Object-Oriented Programming. This means classes can have robust member functions, non-`public` members, nested classes, etc. Members follow dedicated conventions, described in [2.3 Class Members](#23-class-members)
+Classes should be used for Object-Oriented Programming, particularly encapsulation focused objects. This means classes can have robust member functions, non-`public` members, etc. Members follow dedicated naming conventions, described in [2.4 Class Members](#24-class-members)
 
-Unions should rarely be used due to type-safe `std::variant` existing. Otherwise follow rules similar to structs. **Union-based type punning is heavily discouraged due to being UB with better alternatives!**
+Unions should rarely be used due to type-safe `std::variant` existing. Otherwise they follow rules similar to structs. **Union-based type punning is heavily discouraged due to being UB with better alternatives!**
 
 _All_ of these types must be marked `final` if applicable
+
+In member functions, _member function calls should have an explicit `this` pointer_ (unless it's a base-class qualified **initialization delegation**, such as `Base::init()`), while member variable access should _not_ have an explicit `this`
 
 ## 4.2 Structure
 ### 4.2.1 Structs
@@ -365,9 +383,9 @@ The order for access sections is as follows:
 - Protected member variables
 - Private member variables
 
-Access specifiers indentation should be at the `class` keyword level. Access sections must be _separated with a newline_. Specific access sections may be occasionally interrupted with other access sections for better readability (see `init` in the example). Beginning of member variable sections must be marked with a `// Fields` comment. Inline initializers are allowed and preferred for static members over definition in a TU. Static functions should appear before non-static ones in their respective access sections. Static members should appear before other members and be separated with a newline
+Access specifiers indentation should be at the `class` keyword level. Access sections must be _separated with a newline_. Specific access sections may be occasionally interrupted with other access sections for better readability (see `init` in the example). Beginning of member variable sections must be marked with a `// Fields` comment. Inline initializers are allowed and preferred for _static_ members over definition in a TU, but for general member variables initialization via a constructor is preferred. Static functions should appear before non-static ones in their respective access sections. Static members should appear before other members and be separated from them with a newline
 
-Copy/move constructors/assignment operators must be deleted if unneeded and mentioned in the following order (along with constructors and destructors):
+Copy/move constructors/assignment operators must be deleted if unneeded and mentioned in the following order (along with constructors and a destructor):
 - Basic constructor(s)
 - Copy constructor
 - Copy assignment operator
@@ -462,10 +480,10 @@ private:
 ```
 
 ### 4.2.3 Unions
-Rules for unions similar to structs, see [4.2.1 Structs](#421-structs)
+Rules for unions are similar to structs, see [4.2.1 Structs](#421-structs)
 
 ## 4.3 Notes
-**Both structs and classes MUST have their layout optimized for type alignment!** As a first step try reordering members in descending order of their sizes, then account for potential stricter alignment specified with `alignas`. If unsure check the object layout for holes with tools like `pahole`
+**Both structs and classes MUST have their layout optimized for type alignment!** As a first step try reordering members in the descending order of their sizes, then account for potential stricter alignment specified with `alignas`. If unsure check the object layout for holes with tools like `pahole`
 
 Consider using `alignas` to optimize cache locality if the type is close enough to applicable sizes and is vastly used in arrays
 
@@ -473,9 +491,9 @@ Consider using `alignas` to optimize cache locality if the type is close enough 
 # 5. General Codestyle
 ## 5.1 Types
 ### 5.1.1 Integers
-_All_ integer types should be referred to with their `std::` alias from `<cstdint>` (e.g. `std::uint8_t`, `std::int32_t`, etc.). Exceptions to this rules include generic integer representations for metaprogramming (e.g. `std::convertible_to<int>`)
+_All_ integer types should be referred to by their `std::` aliases from `<cstdint>` (e.g. `std::uint8_t`, `std::int32_t`, etc.). Exceptions to this rules include generic integer representations for metaprogramming (e.g. `std::convertible_to<int>`)
 
-When using integer types the smallest one applicable should be used (e.g. when iterating over a static array that's very unlikely to grow over 10 elements in size, `std::uint8_t` should be used)
+When using integer types, the smallest one applicable should be used (e.g. when iterating over a static array that's very unlikely to grow over 10 elements in size, `std::uint8_t` should be used)
 
 All literals for integers should have the following suffixes (unless other suffixes are required):
 - No suffix for any _signed_ integer type
@@ -489,11 +507,15 @@ Enums should have their size limited to the lowest applicable size (most commonl
 
 Every new value should be on its own line
 
+"Internal" values should be separated from general ones with a newline
+
 ```c++
 enum class Example : std::uint8_t {
     Value1,
     Value2,
-    Value3
+    Value3,
+
+    COUNT
 };
 ```
 
@@ -510,7 +532,7 @@ double d = 3.4;
 ```
 
 ### 5.1.4 `auto`
-The `auto` keyword use is encouraged for pointers and classes but should generally be avoided for simple integers or when iterating simple objects like `std::string`s (here in favor of simply `char`)
+The `auto` keyword use is encouraged for pointers and classes but should generally be avoided for simple integers or during iteration of simple objects like `std::string`s (here in favor of simply `char`)
 
 Pointers should _not_ be added to `auto` unless extra specification is required (like `auto const*`)
 
@@ -541,17 +563,17 @@ static thread_local constinit constexpr mutable inline Type const volatile [ms]_
 
 _Order of keywords for a non-member function:_
 ```c++
-extern static inline constexpr consteval RetType name() noexcept;
+extern friend static inline constexpr consteval RetType name() noexcept;
 ```
 
 _Order of keywords for a member function:_
 ```c++
-[[nodiscard]] virtual static constexpr consteval RetType name() const&& override final noexcept;
+[[nodiscard]] friend virtual static constexpr consteval RetType name() const&& override final noexcept;
 ```
 
-_Order of keywords for a lambda:_
+_Order of keywords for a lambda (notice the lack of spaces between the template part and parameters list):_
 ```c++
-[this, var1, var2 = std::move(localVar2), &var3]<typename T>(Type param) static constexpr mutable noexcept -> RetType {
+[this, var1, var2 = std::move(localVar2), &var3]<typename T> requires Concept<T>(Type param) static constexpr consteval mutable noexcept -> RetType {
     body;
 };
 ```
@@ -592,7 +614,7 @@ Logic and bitwise operators should be used in their sign form (i.e. `&&`, `!`, `
 
 When using `operator new`, parenthesis should _not_ be used if a class is later being initialized with dedicated functions (e.g. `init` in Geode mods). Otherwise, `new Class{}` is preferred for aggregates/`std::initializer_list` overloads and `new Class()` is preferred for calling constructors
 
-Prefix increment/decrement should be used whenever possible (e.g. `++i` in `for` loops)
+**Prefix** increment/decrement should be used whenever possible (e.g. `++i` in `for` loops)
 
 Even if the expression works with precedence, parenthesized grouping should be used in ambiguous places for clarity (e.g. `*(s->p)` instead of `*s->p`)
 
@@ -626,7 +648,7 @@ statement;
 ```
 
 ## 5.5 Statement Separation
-Inside functions' bodies the statement should be separated with a newline logically
+Inside functions' bodies statements should be separated with newlines logically
 
 Double/triple newlines are allowed for greater separation of more distinct pieces of logic, although it's recommended to look into moving logic into functions if this is the case
 
@@ -641,7 +663,7 @@ Class* create() {
         return ret;
     }
 
-    // Third logic block (`return` should normally be its own block but "epilogue" logic can be added to it)
+    // Third logic block (`return`) should normally be its own block, but "epilogue" logic can be added to it
     delete ret;
     return nullptr;
 }
@@ -719,7 +741,7 @@ do {
 `do while` statements are _preferred to use in macros if possible_ for scope encapsulation and semicolon requirement
 
 ### 5.6.3 `for`
-`for` keywords should be separated from the statement with a space
+`for` keywords should be separated from the statements block with a space
 
 `for` loops can have a missing initializing statement _or_ a missing iteration statement. If your `for` loop is missing both, consider making it a `while` loop instead. For fully empty `for` loops, consider using `while (true)`
 
@@ -736,7 +758,7 @@ for (init_statement; condition;) {
 ```
 
 ### 5.6.4 `if`
-`if` keywords should be separated from the statement with a space
+`if` keywords should be separated from the condition with a space
 
 Attributes `[[likely]]` and `[[unlikely]]` should be used **very sparingly** and in branches with _definitively close-to-guaranteed/never guaranteed_ chances of taking/not taking them; same goes for the `switch` statement
 
@@ -751,9 +773,9 @@ Each `case` block should end in either a `break` or a `return` statement, unless
 
 Each `case` block should be separated with an empty line, unless the block has a fallthrough
 
-A `default` block _has_ to be in every `switch` statement, even if it throws an exception
+A `default` block _has_ to be in every `switch` statement, even if it just throws an exception
 
-If a `case` block requires a scope the brace begins at the `case` keyword level. Indentation level of the `break` keyword moves in that case (see below)
+If a `case` block requires a scope, the brace begins at the `case` keyword level. Indentation level of the `break` keyword moves in that case (see below)
 
 ```c++
 switch (condition) {
@@ -810,7 +832,7 @@ try {
 ```
 
 ## 5.7 Functions
-_All_ functions should be qualified as `noexcept` whenever possible. Exception for this rule is most Geode mods, since the entire GD/Geode codebase doesn't allow for exceptions to be caught nor does it follow `noexcept`-ness
+_All_ functions should be qualified as `noexcept` whenever possible. Exception for this rule is most Geode mods, since the entire Geometry Dash/Geode codebase doesn't allow for exceptions to be caught, nor does it follow `noexcept`-ness
 
 A free function should either be _wrapped in a namespace_ (if external linkage is required) or _be `static`_
 
@@ -820,39 +842,97 @@ Functions that take no parameters should _never_ have `(void)` as the parameter 
 
 If `main` function's parameters aren't used they should _not_ be explicitly listed
 
-## 5.8 Templates
-The `template` keyword and the specifying statement should have a space
+Function _declarations_ should have _no parameter names_, unless they are a part of _public API of a library_
 
-Non-concept constraining should start with a `requires` keyword at the new line, indented one tab deep
+Explicit object parameter (aka deducing `this`) should be named `self`
+
+### Geode Mods
+In Geode mods, `create` functions should follow this pattern:
+
+```c++
+Class* create(Types... params) {
+    auto ret = new Class;
+
+    if (ret->init(params...)) {
+        ret->autorelease();
+        return ret;
+    }
+
+    delete ret;
+    return nullptr;
+}
+```
+
+Notice the absence of `CC_SAFE_DELETE`, `if (ret && ret->init(...))` and other questionable and unnecessary additions
+
+## 5.8 Templates
+The `template` keyword and the parameters statement should have a space between them
+
+Non-concept constraining should start with a `requires` keyword at the new line, indented one level deep
 
 Functions with multiple parameters of the same template type should have secondary parameters typed as `std::type_identity_t`, unless other behavior is expected
 
 ```c++
 template <typename T>
     requires std::same_as<T, float>
-void foo(T x, std::type_identity_t<T> y) {}
+void foo(T x, std::type_identity_t<T> y) {
+    body;
+}
 ```
 
 `requires` expression should have a space between the parameter list and the body
 
 ```c++
 requires (T a) {
+    typename T::value;
+
     { a.print() };
     { a.getCount() } -> std::convertible_to<int>; // Allowed use of `int` here as a generic integer type in metaprogramming
 }
 ```
 
-## 5.9 Lambdas
-Lambdas should have a space between the parameter list and the body
+## 5.9 Parameter Packs
+Ellipsis should always stick to the _type_ if possible. This is especially relevant in declarations (`template <typename ...Args>` instead of `template <typename... Args>`). Otherwise, ellipsis stick to the _parameter_
+
+```c++
+template <typename ...Args>
+void wrapper(Args&&... args) noexcept {
+    foo(std::forward<Args>(args)...);
+
+    return;
+}
+```
+
+_Fold expressions_ should have a space between the ellipsis and the operation
+
+```c++
+template <typename ...Args>
+    requires (
+        std::derived_from<
+            std::remove_cvref_t<
+                std::remove_pointer_t<Args>
+            >,
+            CCObject
+        > && ... // See `Wrapping` section for guidelines
+    )
+void addObjects(CCArray* arr, Args... args) {
+    (arr->addObject(args), ...);
+
+    return;
+}
+```
+
+## 5.10 Lambdas
+Lambdas should have _no_ space between the capture clause and the parameter list and _have_ a space between the parameter list and the body
 
 Lambdas should _not_ have `[=]` or `[&]` as capture clauses. _All variables should be captured by value/reference or moved into capture variables **individually**_
 
 Lambdas should _not_ have a trailing return type specified unless necessary for the return type inference
 
-# 5.10 Macros
+## 5.11 Macros
 Macro parameters should be wrapped in parenthesis if possible
 
-Multi-line macros should be written with a single level of indentation
+Multi-line macros should be written with one level of indentation
 
 Multi-line macros should be wrapped in `do { ... } while (false)` blocks _whenever possible_. These blocks should _not_ have a `;` at the end
 
@@ -866,6 +946,33 @@ Newlines in multi-line macros should be escaped with _no_ alignment with other `
     } while (false)
 ```
 
+## 5.12 Casts
+Implicit conversions/`static_cast` should be preferred whenever possible
+
+C-style casts (`(std::size_t)5`) are **heavily discouraged**. The only places where these are applicable are explicit value discarding (`(void) foo();`) and casts that otherwise aren't allowed (e.g. Cocos2d-x v2's `SEL_MenuHandler`)
+
+`reinterpret_cast` is _discouraged_, but allowed whenever necessary. Still, make sure to see if other casts (e.g. `std::bit_cast`) suit what you're doing before using it
+
+## 5.13 Namespaces
+Namespaces should have an empty line between the contents and the braces
+
+Namespaces' contents should have _no indentation_
+
+The closing brace should have a comment specifying a namespace in the `// namespace full::namespace::name` format
+
+Multiple nested namespaces should be collapsed into a single one whenever possible
+
+```c++
+namespace example::utils {
+
+void foo() noexcept;
+
+void bar();
+void baz(std::size_t, std::string_view) noexcept;
+
+} // namespace example::utils
+```
+
 
 # 6. Wrapping
 ## 6.1 General Notes
@@ -876,7 +983,7 @@ Whenever you feel like a line of code gets too long and/or unreadable, you shoul
 Single-statement functions should _not_ be wrapped onto the same line, with the exception of lambdas, that can have the whole body on a single line _only as function parameters (usually callbacks)_. In that case _the braces should be separated from the statement with a space_
 
 ```c++
-transformArray(arr, [](auto&& x) { return x * 2; });
+std::views::transform([](auto&& x) { return x * 2; });
 ```
 
 _Function parameters_ should be wrapped with indentation and _grouped logically_/_be on separate lines altogether_
@@ -894,8 +1001,7 @@ void foo(
 ### 6.2.2 Constructors
 If the initializer list does not fit on a single line it should be either:
 
-1) Wrapped into a single, distinct line after parameters
-
+1) Wrapped into a single, distinct line after parameters:
 ```c++
 Class(
     float x, double y, std::string z
@@ -906,8 +1012,7 @@ Class(
 
 Or:
 
-2) Wrapped into an indented list
-
+2) Wrapped into an indented list:
 ```c++
 Class(
     float x, double y, std::string z
@@ -931,7 +1036,7 @@ if (
     ||
     (condition3
     &&
-    condition4)
+    condition4) || cond5 // Conditions can be wrapped onto the same line if this helps readability
 ) {
     body;
 }
@@ -986,12 +1091,36 @@ foo(
     *
     var3)
     -
-    var4
+    var4 + var5
 );
+```
+
+## 6.5 Templates
+Templates should be wrapped with one level of indentation. The next line after the last angle bracket should be _moved onto that line with a space as separation_
+
+```c++
+template <
+    typename T,
+    std::size_t N
+> void foo(T x) noexcept {
+    body;
+}
+```
+
+```c++
+template <
+    typename T,
+    std::size_t N
+> requires std::integral<T>
+void foo(T x) noexcept {
+    body;
+}
 ```
 
 
 # 7. Final Notes
+All code contributed must be _well thought of_ and _optimized_. Most of general optimization techniques and patterns aren't touched here as they have minimal correlation to codestyle, however, it's expected that contributors account for most optimization opportunities
+
 All codestyle here is meant to serve as an _exhaustive reference_ to projects' codestyle where it applies. Anything not covered here can _still be a valid changes request/rejection reason if it's easy to infer the rules for it from surrounding code_
 
-If you notice any inconsistencies between this document and existing (likely old) code, feel free to PR changes to the problematic project(s)
+If you notice any inconsistencies between this document and existing (likely old) code, feel free to PR/push changes to the problematic project(s)
