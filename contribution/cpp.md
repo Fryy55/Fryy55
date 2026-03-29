@@ -10,18 +10,18 @@ This document explains standards that the C++ code you contribute must adhere to
   - [1.3 Project Structure](#13-project-structure)
     - [Geode Mods](#geode-mods)
 - [2. Naming Conventions](#2-naming-conventions)
-  - [2.1 Variables](#21-variables)
-  - [2.2 Misc Entities](#22-misc-entities)
-  - [2.3 Class Members](#23-class-members)
-  - [2.4 Files](#24-files)
-  - [2.5 CMake](#25-cmake)
-  - [2.6 Comments](#26-comments)
+  - [2,1 General Notes](#21-general-notes)
+  - [2.2 Variables](#22-variables)
+  - [2.3 Misc Entities](#23-misc-entities)
+  - [2.4 Class Members](#24-class-members)
+  - [2.5 Files](#25-files)
+  - [2.6 CMake](#26-cmake)
+  - [2.7 Comments](#27-comments)
   - [Geode Mods](#geode-mods-1)
-  - [Notes](#notes)
 - [3. File Structure and Whitespace](#3-file-structure-and-whitespace)
   - [3.1 Header File Structure](#31-header-file-structure)
   - [3.2 Source File Structure](#32-source-file-structure)
-  - [Notes](#notes-1)
+  - [Notes](#notes)
 - [4. Structs/Classes/Unions](#4-structsclassesunions)
   - [4.1 General Information](#41-general-information)
   - [4.2 Structure](#42-structure)
@@ -47,15 +47,25 @@ This document explains standards that the C++ code you contribute must adhere to
     - [5.6.4 `if`](#564-if)
     - [5.6.5 `switch`](#565-switch)
     - [5.6.6 `goto`](#566-goto)
+    - [5.6.7 `try...catch`](#567-trycatch)
   - [5.7 Functions](#57-functions)
   - [5.8 Templates](#58-templates)
   - [5.9 Lambdas](#59-lambdas)
+- [5.10 Macros](#510-macros)
 - [6. Wrapping](#6-wrapping)
+  - [6.1 General Notes](#61-general-notes)
+  - [6.2 Functions](#62-functions)
+    - [6.2.1 General Notes](#621-general-notes)
+    - [6.2.2 Constructors](#622-constructors)
+  - [6.3 Control Flow Elements](#63-control-flow-elements)
+  - [6.4 Operators](#64-operators)
 
 
 # 1. Environment Configuration
 ## 1.1 Files
 All indentation should be in _tabs_ (`\t`, ASCII `0x9`). This can be semi-automatically handled by most text editors/IDEs
+
+A single tab should be visually equal to 4 spaces
 
 C++ files should have _no newline_ at the end
 
@@ -143,7 +153,14 @@ _These are purely examples, actual directories can vary between projects and are
 
 
 # 2. Naming Conventions
-## 2.1 Variables
+## 2,1 General Notes
+`const(expr)`-ness does _not_ affect naming
+
+Short forms like `str` for string, `spr` for sprite, `btn` for button are permitted in local variable names but _not in function names_
+
+Swear words in variable names/comments/etc. are allowed, but please focus on naming code entities logically and instead share your opinion in commit names/comments
+
+## 2.2 Variables
 Local variables - `camelCase`
 
 Static to _source file_ variables - `s_camelCase`
@@ -154,9 +171,9 @@ Global variables are **discouraged entirely**
 
 Template variables - `camelCase_v`
 
-Variable names should be _descriptive_. Names like `i` and `j` are permitted as generic iteration variables. `c` could be used as a `char` variable for string iteration
+Variable names generally should be _descriptive_. In simple logic cases one/two letter variables names are permitted. (e.g. `i` and `j` could be used as generic iteration variables; `c` could be used as a `char` variable for string iteration; `e` could be used as an exception name in a `try...catch` block)
 
-## 2.2 Misc Entities
+## 2.3 Misc Entities
 Macros - `PROJECT_NAME_UPPER_SNAKE_CASE`
 
 _All_ functions - `camelCase`
@@ -185,35 +202,28 @@ Template parameters:
 - `N` for integer NTTPs
   - Semantic, _short_ names in `PascalCase` OR fitting letters (e.g. `A` for `std::meta::info`) for other NTTPs
 
-## 2.3 Class Members
+## 2.4 Class Members
 Member variables - `m_camelCase`
 
 Static variables - `s_camelCase`
 
 Destructors - `~ClassName`
 
-## 2.4 Files
+## 2.5 Files
 Class files - according to a class name (e.g. a file containing the definition of class `HelperClass` should be named `HelperClass.cpp`)
 
 General files - `kebab-case.ext`
 
-## 2.5 CMake
+## 2.6 CMake
 Variables - `UPPER_SNAKE_CASE`
 
 Modules and extra files - `kebab-case.cmake` in `cmake/`
 
-## 2.6 Comments
+## 2.7 Comments
 Comments should be in American English, fully _lowercase_, potentially informal and have no full punctuation. The primary purpose of this is to keep the general "felling" of the codebase approachable and avoid potential AI accusations in projects where it's undesired
 
 ## Geode Mods
 Hooked classes - `HClassName` (e.g. `HMenuLayer` as a hooked `MenuLayer`)
-
-## Notes
-`const(expr)`-ness does _not_ affect naming
-
-Short forms like `str` for string, `spr` for sprite, `btn` for button are permitted in local variable names but _not in function names_
-
-Swear words in variable names/comments/etc. are allowed, but please focus on naming code entities logically and instead share your opinion in commit names/comments
 
 
 # 3. File Structure and Whitespace
@@ -538,6 +548,13 @@ _Order of keywords for a member function:_
 [[nodiscard]] virtual static constexpr consteval RetType name() const&& override final noexcept;
 ```
 
+_Order of keywords for a lambda:_
+```c++
+[this, var1, var2 = std::move(localVar2), &var3]<typename T>(Type param) static constexpr mutable noexcept -> RetType {
+    body;
+};
+```
+
 `const`-qualified member functions have to be marked `[[nodiscard]]`
 
 Trailing return types should be avoided in regular functions unless needed for SFINAE, but constraints and concepts with `if constexpr` checks are preferred whenever possible for this
@@ -631,20 +648,45 @@ Class* create() {
 
 ## 5.6 Control Flow
 ### 5.6.1 General Notes
-Control flow statements can have _no braced scope_, but **only** if the scope in question is the topmost scope
+Single-expression control flow statements can have _no braced scope_, but **only** if the scope in question is the topmost scope
 
-Wrong:
+Single-expression control flow statements _must_ have the expression on the following line, not on the same line
+
+**Wrong:**
 ```c++
 while (condition1)
     if (condition2)
         statement;
 ```
 
-Correct:
+**Wrong:**
+```c++
+while (condition1) {
+    if (condition2) statement;
+}
+```
+
+**Correct:**
 ```c++
 while (condition1) {
     if (condition2)
         statement;
+}
+```
+
+**Wrong:**
+```c++
+for (std::uint8_t i = 0u; i < n; ++i) for (std::uint8_t j = 0u; j < m; ++j) {
+    body;
+}
+```
+
+**Correct:**
+```c++
+for (std::uint8_t i = 0u; i < n; ++i) {
+    for (std::uint8_t j = 0u; j < m; ++j) {
+        body;
+    }
 }
 ```
 
@@ -751,6 +793,21 @@ while (condition1) {
 skip:
 ```
 
+### 5.6.7 `try...catch`
+There should be a space between the `catch` keyword and its parameters
+
+The last `catch` in the chain should always handle every exception (`(...)`)
+
+```c++
+try {
+    body1;
+} catch (std::bad_alloc const& e) {
+    body2;
+} catch (...) {
+    body3;
+}
+```
+
 ## 5.7 Functions
 _All_ functions should be qualified as `noexcept` whenever possible. Exception for this rule is most Geode mods, since the entire GD/Geode codebase doesn't allow for exceptions to be caught nor does it follow `noexcept`-ness
 
@@ -789,12 +846,145 @@ Lambdas should have a space between the parameter list and the body
 
 Lambdas should _not_ have `[=]` or `[&]` as capture clauses. _All variables should be captured by value/reference or moved into capture variables **individually**_
 
-```c++
-static constexpr lambda = [this, var]<typename T>(Type param) mutable noexcept -> RetType {
-    body;
-};
-```
-
 Lambdas should _not_ have a trailing return type specified unless necessary for the return type inference
 
+# 5.10 Macros
+Macro parameters should be wrapped in parenthesis if possible
+
+Multi-line macros should be written with a single level of indentation
+
+Multi-line macros should be wrapped in `do { ... } while (false)` blocks _whenever possible_. These blocks should _not_ have a `;` at the end
+
+Newlines in multi-line macros should be escaped with _no_ alignment with other `\`s and with a _single space_ between the `\` and the last character of the line
+
+```c++
+#define EXAMPLE_RETURN_IF_TRUE(val, ret) \
+    do { \
+        if ((val)) \
+            return ret; \
+    } while (false)
+```
+
+
 # 6. Wrapping
+## 6.1 General Notes
+Whenever you feel like a line of code gets too long and/or unreadable, you should try to see if wrapping it helps. There are no hard rules on line length but please don't make others know you have an ultrawide monitor via the line size
+
+## 6.2 Functions
+### 6.2.1 General Notes
+Single-statement functions should _not_ be wrapped onto the same line, with the exception of lambdas, that can have the whole body on a single line _only as function parameters (usually callbacks)_. In that case _the braces should be separated from the statement with a space_
+
+```c++
+transformArray(arr, [](auto&& x) { return x * 2; });
+```
+
+_Function parameters_ should be wrapped with indentation and _grouped logically_/_be on separate lines altogether_
+
+```c++
+void foo(
+    Sprite const& spr, float sprScale,
+    std::string_view text,
+    std::size_t flag
+) noexcept {
+    body;
+}
+```
+
+### 6.2.2 Constructors
+If the initializer list does not fit on a single line it should be either:
+
+1) Wrapped into a single, distinct line after parameters
+
+```c++
+Class(
+    float x, double y, std::string z
+) : x(x), y(y), z(std::move(z)) {
+    body;
+}
+```
+
+Or:
+
+2) Wrapped into an indented list
+
+```c++
+Class(
+    float x, double y, std::string z
+) : x(x),
+    y(y),
+    z(std::move(z)) {
+    body;
+}
+```
+
+In both cases function parameters either shift on a separate line (like in the examples) or follow wrapping rules outlined in [6.2.1 General Notes](#621-general-notes)
+
+## 6.3 Control Flow Elements
+Conditions should be wrapped with indentation and _explicit parenthesis in case of multi-line spanning conditions_ for clarity
+
+```c++
+if (
+    condition1
+    ||
+    !condition2
+    ||
+    (condition3
+    &&
+    condition4)
+) {
+    body;
+}
+```
+
+`for` statements should be wrapped with indentation, having a single statement per line (3 lines total)
+
+```c++
+for (
+    std::uint8_t i = 0u;
+    i < 34u;
+    ++i
+) {
+    body;
+}
+```
+
+## 6.4 Operators
+All operators should have a space between the operator and the operands, aside from _unary operators_ (`&` as address-of, `*` as dereference, `-` as negation, `++`, etc.) and _member access operators_ (`.` and `->`)
+
+Ternary operators should be wrapped with a _single level of indentation_ and have the `?` at the end of the condition line, with values on the following lines and a `:` on its own line
+
+```c++
+auto a = condition ?
+    trueVal
+    :
+    falseVal;
+```
+
+Range pipes should be indented _**with tabs** to the first level, that starts **further than the first letter of the variable**_. Each new line should start with a pipe
+
+```c++
+auto a = arr
+            | std::views::reverse 
+            | std::views::take(3u);
+```
+
+Chained functions follow similar rules. Each new line should start with either `.` or `->`
+
+```c++
+auto a = Class()
+            .foo()
+            .bar()
+            .baz();
+```
+
+Operations on numbers should be wrapped similarly to conditional operators ([6.3 Control Flow Elements](#63-control-flow-elements))
+
+```c++
+foo(
+    ((var1 + var2) // Could also be wrapped similarly to `&&` in the example
+    *
+    var3)
+    +
+    var4
+);
+```
