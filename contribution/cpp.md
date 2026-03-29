@@ -949,7 +949,7 @@ Newlines in multi-line macros should be escaped with _no_ alignment with other `
 ## 5.12 Casts
 Implicit conversions/`static_cast` should be preferred whenever possible
 
-C-style casts (`(std::size_t)5`) are **heavily discouraged**. The only places where these are applicable are explicit value discarding (`(void) foo();`) and casts that otherwise aren't allowed (e.g. Cocos2d-x v2's `SEL_MenuHandler`)
+C-style casts (`(std::size_t)5`) are **heavily discouraged**. The only places where these are applicable are explicit value discarding (`(void) foo();`, must have a space between the cast and the function call) and casts that otherwise aren't allowed (e.g. Cocos2d-x v2's `SEL_MenuHandler`)
 
 `reinterpret_cast` is _discouraged_, but allowed whenever necessary. Still, make sure to see if other casts (e.g. `std::bit_cast`) suit what you're doing before using it
 
