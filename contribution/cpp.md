@@ -832,7 +832,7 @@ try {
 ```
 
 ## 5.7 Functions
-_All_ functions should be qualified as `noexcept` whenever possible. Exception for this rule is most Geode mods, since the entire Geometry Dash/Geode codebase doesn't allow for exceptions to be caught, nor does it follow `noexcept`-ness
+_All_ functions should be qualified as `noexcept` _whenever possible_. Exception for this rule is most Geode mods, since the entire Geometry Dash/Geode codebase doesn't allow for exceptions to be caught, nor does it follow `noexcept`-ness
 
 A free function should either be _wrapped in a namespace_ (if external linkage is required) or _be `static`_
 
