@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-03-29
+###### Revision from 2026-04-04
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -819,14 +819,14 @@ skip:
 ### 5.6.7 `try...catch`
 There should be a space between the `catch` keyword and its parameters
 
-The last `catch` in the chain should always handle every exception (`(...)`)
+The last `catch` in the chain should always handle every `std::exception`-derived exception
 
 ```c++
 try {
     body1;
 } catch (std::bad_alloc const& e) {
     body2;
-} catch (...) {
+} catch (std::exception const& e) {
     body3;
 }
 ```
