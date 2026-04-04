@@ -568,7 +568,7 @@ extern friend static inline constexpr consteval RetType name() noexcept;
 
 _Order of keywords for a member function:_
 ```c++
-[[nodiscard]] friend virtual static constexpr consteval RetType name() const&& override final noexcept;
+[[nodiscard]] friend virtual static constexpr consteval RetType name() const&& noexcept override final;
 ```
 
 _Order of keywords for a lambda (notice the lack of spaces between the template part and parameters list):_
