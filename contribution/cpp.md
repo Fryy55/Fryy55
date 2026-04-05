@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-04-04
+###### Revision from 2026-04-05
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -246,6 +246,8 @@ Hooked classes - `HClassName` (e.g. `HMenuLayer` as a hooked `MenuLayer`)
 # 3. File Structure and Whitespace
 ## 3.1 General Notes
 Within their categories, headers should preferably be ordered _by their usage in the code_ (e.g. if you're using `<string_view>` a few lines before you use `<span>`, `#include <string_view>` should come first)
+
+`using namespace` statements should be ordered in _alphabetical order_ of namespaces
 
 More detailed whitespace and indentation rules regarding specifically functions, namespaces, classes etc. are described further in their respective sections
 
