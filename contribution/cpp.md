@@ -982,7 +982,7 @@ Whenever you feel like a line of code gets too long and/or unreadable, you shoul
 
 ## 6.2 Functions
 ### 6.2.1 General Notes
-Single-statement functions should _not_ be wrapped onto the same line, with the exception of lambdas, that can have the whole body on a single line _only as function parameters (usually callbacks)_. In that case _the braces should be separated from the statement with a space_
+Single-statement functions _could_ be wrapped onto the same line. In this case, _braces should be separated from the statement with a space_. This also allows to have `void`-returning functions with _no `return` statement_
 
 ```c++
 std::views::transform([](auto&& x) { return x * 2; });
