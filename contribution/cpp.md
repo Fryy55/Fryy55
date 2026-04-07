@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-04-05
+###### Revision from 2026-04-07
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -261,6 +261,8 @@ More detailed whitespace and indentation rules regarding specifically functions,
 - 3rd party headers
 - _Empty line_
 - Standard library headers
+- _Empty line [Geode mods, optional]_
+- _`Geode/modify` headers [optional]_
 - _2 empty lines_
 - Code
 - _Empty line_ (between elements of a file, e.g. functions)
@@ -299,6 +301,8 @@ class Helper2 final {
 - 3rd party headers
 - _Empty line_
 - Standard library headers
+- _Empty line [Geode mods, optional]_
+- _`Geode/modify` headers [optional]_
 - _Empty line_
 - `using namespace` directives **for project's/main framework's** namespace, if needed. `using namespace std` is **banned entirely**
 - _2 empty lines_
