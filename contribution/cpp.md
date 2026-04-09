@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-04-09
+###### Revision from 2026-04-10
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -1065,15 +1065,6 @@ for (
 ## 6.4 Operators
 All operators should have a space between the operator and the operands, aside from _unary operators_ (`&` as address-of, `*` as dereference, `-` as negation, `++`, etc.) and _member access operators_ (`.` and `->`)
 
-Ternary operators should be wrapped with a _single level of indentation_ and have the `?` at the end of the condition line, with values on the following lines and a `:` on its own line
-
-```c++
-auto a = condition ?
-    trueVal
-    :
-    falseVal;
-```
-
 Range pipes should be indented _**with tabs** to the first level, that starts **further than the first letter of the variable**_. Each new line should start with a pipe
 
 ```c++
@@ -1089,6 +1080,15 @@ auto a = Class()
             .foo()
             .bar()
             .baz();
+```
+
+Ternary operators follow similar rules. They should have the `?` at the end of the condition line, with values on the following lines and a `:` on its own line
+
+```c++
+auto a = condition ?
+            trueVal
+            :
+            falseVal;
 ```
 
 Operations on numbers should be wrapped similarly to conditional operators ([6.3 Control Flow Elements](#63-control-flow-elements))
