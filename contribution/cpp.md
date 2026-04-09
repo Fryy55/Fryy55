@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-04-07
+###### Revision from 2026-04-09
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -203,6 +203,8 @@ Namespaces - `snake_case`, but generally names should be kept _relatively short_
 Concepts - `PascalCase`
 
 Modules - `snake_case`
+
+Labels - `camelCase`
 
 `using` aliases - `PascalCase` _with no `_t` suffix_, **aside from template aliases similar to `std::type_identity_t`**
 
