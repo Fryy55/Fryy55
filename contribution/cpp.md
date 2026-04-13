@@ -341,7 +341,7 @@ void Helper2::baz() noexcept {
 
 # 4. Structs/Classes/Unions
 ## 4.1 General Notes
-Structs should be used for simple general purpose aggregates (even if the structure in question isn't an aggregate by definition) and data-focused types. May have custom constructors, a custom/RAII destructor and, potentially, small helper getters/utility functions. Members follow `camelCase`
+Structs should be used for simple general purpose aggregates (even if the structure in question isn't an aggregate by definition), pimpl `Impl` structs and data-focused types. May have custom constructors, a custom/RAII destructor and, potentially, small helper getters/utility functions. Members follow `camelCase`
 
 Classes should be used for Object-Oriented Programming, particularly encapsulation focused objects. This means classes can have robust member functions, non-`public` members, etc. Members follow dedicated naming conventions, described in [2.4 Class Members](#24-class-members)
 
@@ -376,6 +376,8 @@ struct Example1 final {
 Can have anything OOP related.
 
 The order for access sections is as follows:
+- Pimpl struct + `std::unique_ptr` declaration _(under no access specifiers)_
+- _Empty line_
 - Friend classes _(under no access specifiers)_
 - _Empty line_
 - Friend functions _(under no access specifiers)_
