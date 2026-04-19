@@ -215,6 +215,8 @@ Template parameters:
   - Semantic, _short_ names in `PascalCase` for more than one type
 - `N` for integer NTTPs
   - Semantic, _short_ names in `PascalCase` OR fitting letters (e.g. `A` for `std::meta::info`) for other NTTPs
+ 
+`tag_invoke` CPO structs - `functorName_tag`
 
 ## 2.4 Class Members
 Member variables - `m_camelCase`
@@ -341,7 +343,7 @@ void Helper2::baz() noexcept {
 
 # 4. Structs/Classes/Unions
 ## 4.1 General Notes
-Structs should be used for simple general purpose aggregates (even if the structure in question isn't an aggregate by definition), pimpl `Impl` structs and data-focused types. May have custom constructors, a custom/RAII destructor and, potentially, small helper getters/utility functions. Members follow `camelCase`
+Structs should be used for simple general purpose aggregates (even if the structure in question isn't an aggregate by definition), small internal helper types (pimpl `Impl`, CPOs/niebloids) and data-focused types. May have custom constructors, a custom/RAII destructor and, potentially, small helper getters/utility functions. Members follow `camelCase`
 
 Classes should be used for Object-Oriented Programming, particularly encapsulation focused objects. This means classes can have robust member functions, non-`public` members, etc. Members follow dedicated naming conventions, described in [2.4 Class Members](#24-class-members)
 
@@ -893,7 +895,7 @@ void foo(T x, std::type_identity_t<T> y) {
 `requires` expression should have a space between the parameter list and the body
 
 ```c++
-requires(T a) {
+requires (T a) {
     typename T::value;
 
     { a.print() };
@@ -972,8 +974,16 @@ The closing brace should have a comment specifying a namespace in the `// namesp
 
 Multiple nested namespaces should be collapsed into a single one whenever possible
 
+Namespaces that are internal in any way should be called exactly `_internal`
+
 ```c++
 namespace example::utils {
+
+namespace _internal {
+
+int helper(std::string_view);
+
+} // namespace _internal
 
 void foo() noexcept;
 
