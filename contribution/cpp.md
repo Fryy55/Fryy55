@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-04-13
+###### Revision from 2026-04-19
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -893,7 +893,7 @@ void foo(T x, std::type_identity_t<T> y) {
 `requires` expression should have a space between the parameter list and the body
 
 ```c++
-requires (T a) {
+requires(T a) {
     typename T::value;
 
     { a.print() };
