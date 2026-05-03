@@ -8,7 +8,7 @@ Here's the default template idk:
 - 👯 I’m looking to collaborate on `GD mods maybe? if i'm not super busy 🙏`
 - 🤔 I’m looking for help with `Geode sometimes`
 - 💬 Ask me about `anything!`
-- 📫 How to reach me: `3pm.fryy@gmail.com`
+- 📫 How to reach me: `fryy_55@gode-sdk.org`
 - 😄 Pronouns: `she/her`
 - ⚡ Fun fact: `vue, python and ts in my lang stats are forced projects i'm not like this`
 
