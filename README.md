@@ -10,7 +10,7 @@ Here's the default template idk:
 - 💬 Ask me about `anything!`
 - 📫 How to reach me: `3pm.fryy@gmail.com`
 - 😄 Pronouns: `she/her`
-- ⚡ Fun fact: `and i said "oooh, the hooker was naked"`
+- ⚡ Fun fact: `vue, python and ts in my lang stats are forced projects i'm not like this`
 
 Oh, and the last thing - my Discord server: https://discord.com/invite/4vqtjfdhTk <3
 
