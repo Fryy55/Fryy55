@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-04-19
+###### Revision from 2026-06-22
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -505,7 +505,7 @@ Consider using `alignas` to optimize cache locality if the type is close enough 
 ### 5.1.1 Integers
 _All_ integer types should be referred to by their `std::` aliases from `<cstdint>` (e.g. `std::uint8_t`, `std::int32_t`, etc.). Exceptions to this rules include generic integer representations for metaprogramming (e.g. `std::convertible_to<int>`)
 
-When using integer types, the smallest one applicable should be used (e.g. when iterating over a static array that's very unlikely to grow over 10 elements in size, `std::uint8_t` should be used)
+When using integer types, the smallest one applicable should be used. Exception to this rule are local variables, which should use fast variants (e.g. when iterating over a static array that's very unlikely to grow over 10 elements in size, `std::uint_fast8_t` should be used)
 
 All literals for integers should have the following suffixes (unless other suffixes are required):
 - No suffix for any _signed_ integer type
