@@ -10,7 +10,7 @@ Here's the default template idk:
 - 💬 Ask me about `anything!`
 - 📫 How to reach me: `fryy_55@gode-sdk.org`
 - 😄 Pronouns: `she/her`
-- ⚡ Fun fact: `vue, python and ts in my lang stats are forced projects i'm not like this`
+- ⚡ Fun fact: `vue, python, ts and other dynamic thingies in my lang stats are far from main projects i'm not like this`
 
 Oh, and the last thing - my Discord server: https://discord.com/invite/4vqtjfdhTk <3
 
