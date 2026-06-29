@@ -1,4 +1,4 @@
-I ~~play~~ mod Geometry Dash a lot more than I should 🟪
+I ~~play~~ mod Geometry Dash a lot ~~more~~ less than I should 🟪
 
 Pfp art by BlueShaders (Reddit) ✨
 
