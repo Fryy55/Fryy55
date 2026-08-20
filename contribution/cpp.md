@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-06-22
+###### Revision from 2026-08-21
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -360,7 +360,7 @@ Should have raw members, optionally with a custom constructor(s) and/or destruct
 Example:
 ```c++
 struct Example1 final {
-    Example1(std::uint64_t* pointer, std::int16_t number) : pointer(pointer), number(number) {
+    Example1(std::uint64_t* pointer, std::int16_t number) : pointer{ pointer }, number{ number } {
         std::println("Constructed with {} and {}", pointer, number);
     }
 
@@ -375,7 +375,7 @@ struct Example1 final {
 ```
 
 ### 4.2.2 Classes
-Can have anything OOP related.
+Can have anything OOP related
 
 The order for access sections is as follows:
 - Pimpl struct + `std::unique_ptr` declaration _(under no access specifiers)_
@@ -395,7 +395,7 @@ The order for access sections is as follows:
 - Protected member variables
 - Private member variables
 
-Access specifiers indentation should be at the `class` keyword level. Access sections must be _separated with a newline_. Specific access sections may be occasionally interrupted with other access sections for better readability (see `init` in the example). Beginning of member variable sections must be marked with a `// Fields` comment. Inline initializers are allowed and preferred for _static_ members over definition in a TU, but for general member variables initialization via a constructor is preferred. Static functions should appear before non-static ones in their respective access sections. Static members should appear before other members and be separated from them with a newline
+Access specifiers indentation should be at the `class` keyword level. Access sections must be _separated with a newline_. Specific access sections may be occasionally interrupted with other access sections for better readability (see `init` in the example). Beginning of member variable sections must be marked with a `// Fields` comment on the same line as the first access specifier. Inline initializers are allowed and preferred for _static_ members over definition in a TU, but for general member variables initialization via a constructor is preferred. Static functions should appear before non-static ones in their respective access sections. Static members should appear before other members and be separated from them with a newline
 
 Copy/move constructors/assignment operators must be deleted if unneeded and mentioned in the following order (along with constructors and a destructor):
 - Basic constructor(s)
@@ -482,8 +482,7 @@ private:
         }
     }
 
-// Fields
-private:
+private: // Fields
     static inline std::uint64_t s_instances = 0u;
 
     std::string m_string;
@@ -590,12 +589,12 @@ _Order of keywords for a lambda (notice the lack of spaces between the template 
 };
 ```
 
-`const`-qualified member functions have to be marked `[[nodiscard]]`
+`const`-qualified non-`void` returning member functions have to be marked `[[nodiscard]]`
 
-Trailing return types should be avoided in regular functions unless needed for SFINAE, but constraints and concepts with `if constexpr` checks are preferred whenever possible for this
+Trailing return types should be avoided in regular functions unless needed for SFINAE, as constraints and concepts with `if constexpr` checks are preferred whenever possible for this
 
 ## 5.3 Operators
-For initializing POD values, `operator=` should be preferred
+For initializing non-class types, `operator=` should be preferred
 
 For initializing classes, _braced direct initialization_ should be preferred, with or without a type specification
 
@@ -854,9 +853,13 @@ Functions that take no parameters should _never_ have `(void)` as the parameter 
 
 If `main` function's parameters aren't used they should _not_ be explicitly listed
 
-Function _declarations_ should have _no parameter names_, unless they are a part of _public API of a library_
+_Declarations_ of private class methods should have _no parameter names_
 
 Explicit object parameter (aka deducing `this`) should be named `self`
+
+Single parameters of other instances of a class (e.g. the parameter of a copy constructor) should be named `other`
+
+Constructors should use braces for most ordinary initialization list parameters (with spacing rules described in [5.3 Operators](#53-operators)) and parenthesis for constructor delegation or where braces won't work
 
 ### Geode Mods
 In Geode mods, `create` functions should follow this pattern:
@@ -1025,7 +1028,7 @@ If the initializer list does not fit on a single line it should be either:
 ```c++
 Class(
     float x, double y, std::string z
-) : x(x), y(y), z(std::move(z)) {
+) : x{ x }, y{ y }, z{ std::move(z) } {
     body;
 }
 ```
@@ -1036,9 +1039,9 @@ Or:
 ```c++
 Class(
     float x, double y, std::string z
-) : x(x),
-    y(y),
-    z(std::move(z)) {
+) : x{ x },
+    y{ y },
+    z{ std::move(z) } {
     body;
 }
 ```
