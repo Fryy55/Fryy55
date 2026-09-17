@@ -3,10 +3,10 @@ I ~~play~~ mod Geometry Dash a lot ~~more~~ less than I should 🟪
 Pfp art by BlueShaders (Reddit) ✨
 
 Here's the default template idk:
-- 🔭 I’m currently working on `GD mods`
-- 🌱 I’m currently learning `web dev 👎 and OpenGL 👍`
+- 🔭 I’m currently working on `studying... and some mutually unrelated projects`
+- 🌱 I’m currently learning `FPGA programming and HDLs`
 - 👯 I’m looking to collaborate on `GD mods maybe? if i'm not super busy 🙏`
-- 🤔 I’m looking for help with `Geode sometimes`
+- 🤔 I’m looking for help with `nothing maybe?`
 - 💬 Ask me about `anything!`
 - 📫 How to reach me: `fryy_55@gode-sdk.org`
 - 😄 Pronouns: `she/her`
