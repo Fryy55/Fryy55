@@ -1,12 +1,13 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-08-21
+###### Revision from 2026-10-18
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
 
 <!-- omit from toc -->
 # Table of Contents
+- [0. AI Contributions](#0-ai-contributions)
 - [1. Environment Configuration](#1-environment-configuration)
   - [1.1 Files](#11-files)
   - [1.2 Tooling](#12-tooling)
@@ -69,6 +70,10 @@ This document explains standards that the C++ code you contribute must adhere to
   - [6.4 Operators](#64-operators)
   - [6.5 Templates](#65-templates)
 - [7. Final Notes](#7-final-notes)
+
+
+# 0. AI Contributions
+AI-generated contributions are **strictly prohibited**. They **WILL be unconditionally rejected** and lead to **your permanent ban from future contributions**. AI-assisted contributions also are _heavily discouraged_, and in any way, having AI-model contributors listed in your Pull Request/commit Contributors **will lead to a PR rejection**
 
 
 # 1. Environment Configuration
