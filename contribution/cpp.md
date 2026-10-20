@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # C++ Contribution Code Standards
-###### Revision from 2026-10-18
+###### Revision from 2026-10-20
 ---
 
 This document explains standards that the C++ code you contribute must adhere to. Enforcement of specific points is up to the reviewer.
@@ -186,7 +186,7 @@ Static to _function_ variables - `camelCase`
 
 Global variables are **discouraged entirely**
 
-Template variables - `camelCase_v`
+Template variables - `camelCase_v`; `PascalCase_v` if derived from a matching type (e.g. `using SomeTrait_v = SomeTrait<T>::value`)
 
 Variable names generally should be _descriptive_. In simple logic cases, one/two letter variables names are permitted (e.g. `i` and `j` could be used as generic iteration variables; `c` could be used as a `char` variable for string iteration; `e` could be used as an exception name in a `try...catch` block)
 
